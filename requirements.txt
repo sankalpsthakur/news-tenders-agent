@@ -1,12 +1,37 @@
-# Web scraping
-beautifulsoup4==4.9.3
-requests==2.25.1
+# Hygenco News & Tenders Monitor - Dependencies
 
-# Environment variables
-python-dotenv==0.19.0
+# Web framework
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+
+# Templates
+jinja2==3.1.3
+
+# Database
+sqlalchemy==2.0.25
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Web scraping
+beautifulsoup4==4.12.3
+requests==2.31.0
+lxml==5.1.0
 
 # Scheduling
-schedule==1.1.0
+apscheduler==3.10.4
 
-# For sending emails (if using SMTP)
-smtplib==1.1.0
+# Utilities
+python-dotenv==1.0.0
+
+# Optional: for better async performance
+httpx==0.26.0
+aiofiles==23.2.1
+
+# PDF generation
+weasyprint==60.2
+pydyf==0.10.0
+Pillow==10.4.0
+
+# Email
+aiosmtplib==3.0.1

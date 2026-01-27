@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ report_title }}</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4;
+            margin: 2cm;
+            @top-center {
+                content: "Hygenco News & Tenders Monitor";
+                font-size: 10px;
+                color: #666;
+            }
+            @bottom-center {
+                content: "Page " counter(page) " of " counter(pages);
+                font-size: 10px;
+                color: #666;
+            }
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 11px;
+            line-height: 1.5;
+            color: #333;
+            background: #fff;
+        }
+
+        /* Header */
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #2c5282;
+        }
+
+        .report-header h1 {
+            font-size: 24px;
+            color: #2c5282;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .report-header .subtitle {
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 5px;
+        }
+
+        .report-header .date-range {
+            font-size: 12px;
+            color: #718096;
+            font-style: italic;
+        }
+
+        .report-header .generated-date {
+            font-size: 10px;
+            color: #a0aec0;
+            margin-top: 10px;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            font-size: 16px;
+            color: #2c5282;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        /* Executive Summary */
+        .executive-summary {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #2c5282;
+        }
+
+        .executive-summary p {
+            font-size: 12px;
+            line-height: 1.7;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .executive-summary p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Statistics Grid */
+        .stats-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 120px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-card .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c5282;
+            display: block;
+        }
+
+        .stat-card .stat-label {
+            font-size: 10px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 5px;
+        }
+
+        .stat-card.primary {
+            background: #2c5282;
+            border-color: #2c5282;
+        }
+
+        .stat-card.primary .stat-value {
+            color: #fff;
+        }
+
+        .stat-card.primary .stat-label {
+            color: #bee3f8;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            margin-bottom: 15px;
+        }
+
+        th {
+            background: #2c5282;
+            color: #fff;
+            padding: 10px 8px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 9px;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        tr:hover {
+            background: #edf2f7;
+        }
+
+        /* Source Breakdown */
+        .source-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: #f8fafc;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .source-name {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .source-count {
+            background: #2c5282;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Weekly Breakdown Table */
+        .weekly-table th,
+        .weekly-table td {
+            text-align: center;
+        }
+
+        .weekly-table .week-label {
+            text-align: left;
+            font-weight: 600;
+        }
+
+        /* News Items Table */
+        .news-table {
+            font-size: 9px;
+        }
+
+        .news-table th {
+            font-size: 8px;
+        }
+
+        .news-table .title-cell {
+            max-width: 200px;
+            word-wrap: break-word;
+        }
+
+        .news-table .url-cell {
+            max-width: 150px;
+            word-wrap: break-word;
+            font-size: 8px;
+            color: #3182ce;
+        }
+
+        .news-table .date-cell {
+            white-space: nowrap;
+            font-size: 9px;
+            color: #718096;
+        }
+
+        .news-table .source-cell {
+            font-weight: 600;
+            color: #2c5282;
+        }
+
+        /* Footer */
+        .report-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            font-size: 9px;
+            color: #a0aec0;
+        }
+
+        .report-footer p {
+            margin-bottom: 5px;
+        }
+
+        /* Utility Classes */
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #718096;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <!-- Report Header -->
+    <div class="report-header">
+        <h1>{{ report_title }}</h1>
+        <div class="subtitle">Hygenco News & Tenders Monitor</div>
+        <div class="date-range">
+            {{ start_date.strftime('%B %d, %Y') }} - {{ end_date.strftime('%B %d, %Y') }}
+        </div>
+        <div class="generated-date">
+            Generated on {{ generated_at.strftime('%B %d, %Y at %H:%M UTC') }}
+        </div>
+    </div>
+
+    <!-- Executive Summary -->
+    <div class="section">
+        <h2 class="section-title">Executive Summary</h2>
+        <div class="executive-summary">
+            <p>
+                This report covers the period from <strong>{{ start_date.strftime('%B %d, %Y') }}</strong>
+                to <strong>{{ end_date.strftime('%B %d, %Y') }}</strong>, spanning
+                <strong>{{ (end_date - start_date).days + 1 }} days</strong>.
+            </p>
+            <p>
+                During this period, the monitoring system collected a total of
+                <strong>{{ total_items }} news items</strong> from
+                <strong>{{ items_by_source|length }} sources</strong>.
+                {% if new_items > 0 %}
+                Of these, <strong>{{ new_items }} items</strong> ({{ ((new_items / total_items) * 100)|round(1) if total_items > 0 else 0 }}%)
+                were newly discovered.
+                {% endif %}
+            </p>
+            <p>
+                The system executed <strong>{{ total_runs }} scraping runs</strong> with a
+                success rate of <strong>{{ ((successful_runs / total_runs) * 100)|round(1) if total_runs > 0 else 0 }}%</strong>
+                ({{ successful_runs }} successful, {{ total_runs - successful_runs }} failed).
+            </p>
+            {% if sources_filter %}
+            <p>
+                <em>Note: This report is filtered to include only the following sources: {{ sources_filter|join(', ') }}</em>
+            </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Key Statistics -->
+    <div class="section">
+        <h2 class="section-title">Key Statistics</h2>
+        <div class="stats-grid">
+            <div class="stat-card primary">
+                <span class="stat-value">{{ total_items }}</span>
+                <span class="stat-label">Total Items</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">{{ new_items }}</span>
+                <span class="stat-label">New Items</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">{{ total_runs }}</span>
+                <span class="stat-label">Total Runs</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">{{ successful_runs }}</span>
+                <span class="stat-label">Successful Runs</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">{{ items_by_source|length }}</span>
+                <span class="stat-label">Active Sources</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Items by Source -->
+    <div class="section">
+        <h2 class="section-title">Items by Source</h2>
+        {% if items_by_source %}
+            {% for source, count in items_by_source|dictsort(by='value', reverse=true) %}
+            <div class="source-item">
+                <span class="source-name">{{ source }}</span>
+                <span class="source-count">{{ count }} items</span>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">No source data available for this period.</div>
+        {% endif %}
+    </div>
+
+    <!-- Weekly Breakdown -->
+    {% if weekly_breakdown %}
+    <div class="section">
+        <h2 class="section-title">Weekly Breakdown</h2>
+        <table class="weekly-table">
+            <thead>
+                <tr>
+                    <th class="week-label">Week</th>
+                    <th>Total Items</th>
+                    <th>New Items</th>
+                    <th>Runs</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for week in weekly_breakdown %}
+                <tr>
+                    <td class="week-label">{{ week.label }}</td>
+                    <td>{{ week.total_items }}</td>
+                    <td>{{ week.new_items }}</td>
+                    <td>{{ week.runs }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- News Items Table -->
+    {% if news_items %}
+    <div class="section page-break">
+        <h2 class="section-title">News Items Detail ({{ news_items|length }} items)</h2>
+        <table class="news-table">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">Source</th>
+                    <th style="width: 40%;">Title</th>
+                    <th style="width: 15%;">Date</th>
+                    <th style="width: 35%;">URL</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in news_items %}
+                <tr>
+                    <td class="source-cell">{{ item.source }}</td>
+                    <td class="title-cell">{{ item.title }}</td>
+                    <td class="date-cell">{{ item.published_date or item.created_at.strftime('%Y-%m-%d') if item.created_at else 'N/A' }}</td>
+                    <td class="url-cell">{{ item.url or 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="section">
+        <h2 class="section-title">News Items</h2>
+        <div class="empty-state">No news items found for this period.</div>
+    </div>
+    {% endif %}
+
+    <!-- Report Footer -->
+    <div class="report-footer">
+        <p>This report was automatically generated by Hygenco News & Tenders Monitor.</p>
+        <p>For questions or support, please contact the system administrator.</p>
+    </div>
+</body>
+</html>

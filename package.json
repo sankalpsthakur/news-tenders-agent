@@ -1,0 +1,25 @@
+{
+  "name": "news-tenders-agent",
+  "version": "1.0.0",
+  "description": "MNRE, SECI, Twitter Feeds scraped and delivered to teams/email",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sankalpsthakur/news-tenders-agent.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sankalpsthakur/news-tenders-agent/issues"
+  },
+  "homepage": "https://github.com/sankalpsthakur/news-tenders-agent#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.0",
+    "playwright": "^1.58.0"
+  }
+}
