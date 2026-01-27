@@ -58,12 +58,18 @@ def generate_content_hash(source: str, title: str, url: str) -> str:
 
 # URL generation functions removed - now using real URLs from data
 
-def seed_database():
+def seed_database(force=False):
     """Seed the database with realistic demo data."""
     print("🌱 Initializing database...")
     init_db()
 
     with get_db() as db:
+        # Only seed if database is empty (or force=True)
+        existing_runs = db.query(Run).count()
+        if existing_runs > 0 and not force:
+            print(f"✅ Database already has {existing_runs} runs. Skipping seed.")
+            return
+
         # Clear existing demo data
         print("🧹 Clearing existing data...")
         db.query(Notification).delete()
