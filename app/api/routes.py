@@ -61,15 +61,39 @@ async def runs_page(request: Request, db: Session = Depends(get_db_session)):
 
 
 @router.get("/news", response_class=HTMLResponse)
-async def news_page(request: Request, db: Session = Depends(get_db_session)):
-    """News browser page."""
-    items = db.query(NewsItem).order_by(desc(NewsItem.created_at)).limit(100).all()
+async def news_page(
+    request: Request,
+    item_type: Optional[str] = None,
+    db: Session = Depends(get_db_session)
+):
+    """News browser page - shows only news items by default."""
+    query = db.query(NewsItem)
+    # Filter for news items only (exclude tenders) unless item_type is explicitly specified
+    if item_type:
+        query = query.filter(NewsItem.item_type == item_type)
+    else:
+        query = query.filter(NewsItem.item_type == 'news')
+    items = query.order_by(desc(NewsItem.created_at)).limit(100).all()
     sources = db.query(Source).filter(Source.enabled == True).all()
     return templates.TemplateResponse("news.html", {
         "request": request,
         "items": items,
         "sources": sources,
-        "page": "news"
+        "page": "news",
+        "item_type": item_type
+    })
+
+
+@router.get("/tenders", response_class=HTMLResponse)
+async def tenders_page(request: Request, db: Session = Depends(get_db_session)):
+    """Tenders browser page - shows only tender items."""
+    items = db.query(NewsItem).filter(NewsItem.item_type == 'tender').order_by(desc(NewsItem.created_at)).limit(100).all()
+    sources = db.query(Source).filter(Source.enabled == True).all()
+    return templates.TemplateResponse("tenders.html", {
+        "request": request,
+        "items": items,
+        "sources": sources,
+        "page": "tenders"
     })
 
 
@@ -354,6 +378,7 @@ async def toggle_source(source_id: int, db: Session = Depends(get_db_session)):
 async def list_news(
     source: Optional[str] = None,
     search: Optional[str] = None,
+    item_type: Optional[str] = None,
     limit: int = Query(default=50, le=200),
     offset: int = 0,
     db: Session = Depends(get_db_session)
@@ -365,6 +390,8 @@ async def list_news(
         query = query.filter(NewsItem.source == source)
     if search:
         query = query.filter(NewsItem.title.ilike(f"%{search}%"))
+    if item_type:
+        query = query.filter(NewsItem.item_type == item_type)
 
     items = query.order_by(desc(NewsItem.created_at)).offset(offset).limit(limit).all()
     return [NewsItemResponse.model_validate(i) for i in items]

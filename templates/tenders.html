@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}News - Hygenco News & Tenders Monitor{% endblock %}
+{% block title %}Tenders - Hygenco News & Tenders Monitor{% endblock %}
 
-{% block page_title %}News Browser{% endblock %}
+{% block page_title %}Tenders Browser{% endblock %}
 
 {% block content %}
 <div x-data="{
@@ -38,7 +38,7 @@
                         type="text"
                         x-model="search"
                         @keyup.enter="applyFilters()"
-                        placeholder="Search news titles..."
+                        placeholder="Search tender titles..."
                         class="w-full pl-10 pr-4 py-2 rounded-lg border-gray-300 shadow-sm focus:border-hygenco-500 focus:ring-hygenco-500"
                     >
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -127,7 +127,7 @@
     <!-- Results Count -->
     <div class="mb-4 flex items-center justify-between">
         <p class="text-sm text-gray-600">
-            Showing <span class="font-semibold">{{ items | length }}</span> news items
+            Showing <span class="font-semibold">{{ items | length }}</span> tender items
             {% if request.query_params.get('search') %}
             for "<span class="font-semibold">{{ request.query_params.get('search') }}</span>"
             {% endif %}
@@ -152,19 +152,15 @@
                 <p class="text-sm text-gray-600 line-clamp-3 mb-4">{{ item.description }}</p>
                 {% endif %}
                 <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-                    {% if item.type %}
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {% if item.type == 'tender' %}bg-purple-100 text-purple-700{% else %}bg-blue-100 text-blue-700{% endif %}">
-                        {{ item.type | capitalize }}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-700">
+                        Tender
                     </span>
-                    {% else %}
-                    <span></span>
-                    {% endif %}
                     <a
                         href="{{ item.url }}"
                         target="_blank"
                         class="inline-flex items-center text-sm font-medium text-hygenco-600 hover:text-hygenco-700"
                     >
-                        Read more
+                        View Details
                         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                         </svg>
@@ -175,9 +171,9 @@
         {% else %}
         <div class="col-span-full bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
-            <p class="mt-4 text-lg font-medium text-gray-900">No news items found</p>
+            <p class="mt-4 text-lg font-medium text-gray-900">No tender items found</p>
             <p class="mt-1 text-gray-500">Try adjusting your filters or run a new scan.</p>
         </div>
         {% endfor %}
@@ -191,7 +187,6 @@
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Link</th>
                     </tr>
@@ -209,15 +204,6 @@
                                 {{ item.title }}
                             </a>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            {% if item.type %}
-                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {% if item.type == 'tender' %}bg-purple-100 text-purple-700{% else %}bg-blue-100 text-blue-700{% endif %}">
-                                {{ item.type | capitalize }}
-                            </span>
-                            {% else %}
-                            <span class="text-gray-400">-</span>
-                            {% endif %}
-                        </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {{ item.date | default('N/A') }}
                         </td>
@@ -231,11 +217,11 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                        <td colspan="4" class="px-6 py-12 text-center text-gray-500">
                             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
-                            <p class="mt-4 text-lg font-medium">No news items found</p>
+                            <p class="mt-4 text-lg font-medium">No tender items found</p>
                             <p class="mt-1">Try adjusting your filters or run a new scan.</p>
                         </td>
                     </tr>

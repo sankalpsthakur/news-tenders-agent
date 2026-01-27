@@ -97,6 +97,7 @@ class NewsItemBase(BaseModel):
     title: str
     url: Optional[str] = None
     published_date: Optional[str] = None
+    item_type: Optional[str] = None
 
 
 class NewsItemCreate(NewsItemBase):
@@ -110,6 +111,7 @@ class NewsItemResponse(NewsItemBase):
     run_id: Optional[int] = None
     created_at: datetime
     is_new: bool
+    item_type: Optional[str] = None
 
     class Config:
         from_attributes = True

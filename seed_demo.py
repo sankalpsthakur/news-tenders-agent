@@ -13,42 +13,42 @@ from app.database import init_db, get_db, Run, NewsItem, Source, Setting, Notifi
 STATES = ["Rajasthan", "Gujarat", "Tamil Nadu", "Karnataka", "Andhra Pradesh",
           "Maharashtra", "Madhya Pradesh", "Telangana", "Kerala", "Odisha"]
 
-# Realistic MNRE tender data
+# Realistic MNRE tender data with REAL URLs
 MNRE_TENDERS = [
-    {"title": "Selection of Solar Power Developers for Setting up of 1500 MW ISTS-Connected Solar PV Power Projects in India", "type": "RfS"},
-    {"title": "EoI for Development of Green Hydrogen Hubs across India under National Green Hydrogen Mission", "type": "EoI"},
-    {"title": "Tender for Supply and Installation of 10,000 Solar Water Pumping Systems under PM-KUSUM Component-B", "type": "Tender"},
-    {"title": "Request for Proposal for Implementation of Grid-Connected Rooftop Solar Programme Phase-II", "type": "RfP"},
-    {"title": "Notice Inviting Tender for O&M of 50 MW Solar Power Plant at Bhadla Solar Park", "type": "NIT"},
-    {"title": "EoI for Setting up of Offshore Wind Energy Projects in Tamil Nadu and Gujarat Coast", "type": "EoI"},
-    {"title": "Tender for Procurement of Battery Energy Storage Systems (BESS) - 500 MWh Capacity", "type": "Tender"},
-    {"title": "RfP for Development of Ultra Mega Renewable Energy Power Parks (UMREPP)", "type": "RfP"},
-    {"title": "Selection of Bidders for 800 MW Wind Power Projects under Tranche-XIV", "type": "RfS"},
-    {"title": "Tender for Manufacturing of High-Efficiency Solar Cells and Modules under PLI Scheme", "type": "Tender"},
-    {"title": "Notice for Empanelment of Agencies for Solar Rooftop Installation", "type": "Notice"},
-    {"title": "EoI for Pilot Projects on Green Ammonia Production using Renewable Energy", "type": "EoI"},
-    {"title": "Tender for Smart Grid Infrastructure Development in 5 Smart Cities", "type": "Tender"},
-    {"title": "RfP for Consultancy Services for National Renewable Energy Assessment", "type": "RfP"},
-    {"title": "Selection of Project Developers for 300 MW Floating Solar Projects", "type": "RfS"},
+    {"title": "Selection of Solar Power Developers for Setting up of 1500 MW ISTS-Connected Solar PV Power Projects", "type": "RfS", "url": "https://mnre.gov.in/en/tender/", "item_type": "tender"},
+    {"title": "EoI for Development of Green Hydrogen Hubs across India under National Green Hydrogen Mission", "type": "EoI", "url": "https://nghm.mnre.gov.in/", "item_type": "tender"},
+    {"title": "Tender for Supply and Installation of 10,000 Solar Water Pumping Systems under PM-KUSUM", "type": "Tender", "url": "https://mnre.gov.in/en/pradhan-mantri-kisan-urja-suraksha-evam-utthaan-mahabhiyaan-pm-kusum/", "item_type": "tender"},
+    {"title": "Request for Proposal for Implementation of Grid-Connected Rooftop Solar Programme Phase-II", "type": "RfP", "url": "https://mnre.gov.in/en/notice-category/current-notices/", "item_type": "tender"},
+    {"title": "Notice Inviting Tender for O&M of 50 MW Solar Power Plant at Bhadla Solar Park", "type": "NIT", "url": "https://mnre.gov.in/en/past-notices/tenders/", "item_type": "tender"},
+    {"title": "EoI for Setting up of Offshore Wind Energy Projects in Tamil Nadu and Gujarat Coast", "type": "EoI", "url": "https://niwe.res.in/tenders.php", "item_type": "tender"},
+    {"title": "Tender for Procurement of Battery Energy Storage Systems (BESS) - 500 MWh Capacity", "type": "Tender", "url": "https://mnre.gov.in/en/energy-storage-systemsess-projects-and-tenders/", "item_type": "tender"},
+    {"title": "RfP for Development of Ultra Mega Renewable Energy Power Parks (UMREPP)", "type": "RfP", "url": "https://mnre.gov.in/en/documents/", "item_type": "tender"},
+    {"title": "Selection of Bidders for 800 MW Wind Power Projects under Tranche-XIV", "type": "RfS", "url": "https://niwe.res.in/tenders.php", "item_type": "tender"},
+    {"title": "Tender for Manufacturing of High-Efficiency Solar Cells and Modules under PLI Scheme", "type": "Tender", "url": "https://nise.res.in/?s=tenders", "item_type": "tender"},
+    {"title": "Notice for Empanelment of Agencies for Solar Rooftop Installation", "type": "Notice", "url": "https://mnre.gov.in/en/notice-category/current-notices/", "item_type": "tender"},
+    {"title": "EoI for Pilot Projects on Green Ammonia Production using Renewable Energy", "type": "EoI", "url": "https://nghm.mnre.gov.in/", "item_type": "tender"},
+    {"title": "Tender for Smart Grid Infrastructure Development in 5 Smart Cities", "type": "Tender", "url": "https://www.ireda.in/tender", "item_type": "tender"},
+    {"title": "RfP for Consultancy Services for National Renewable Energy Assessment", "type": "RfP", "url": "https://mnre.gov.in/en/annual-report-2024-25/", "item_type": "tender"},
+    {"title": "Selection of Project Developers for 300 MW Floating Solar Projects", "type": "RfS", "url": "https://mnre.gov.in/en/tender/", "item_type": "tender"},
 ]
 
-# Realistic SECI news/announcements
+# Realistic SECI news/announcements with REAL URLs
 SECI_NEWS = [
-    {"title": "SECI Announces Results of e-Reverse Auction for 1200 MW ISTS Solar Projects - Lowest Tariff Rs 2.36/kWh", "type": "Results"},
-    {"title": "Amendment-III to RfS for 1500 MW Tranche-XII Wind Power Projects - Extension of Bid Submission", "type": "Amendment"},
-    {"title": "SECI Issues Letter of Award (LoA) to Successful Bidders for 2000 MW Hybrid Projects", "type": "LoA"},
-    {"title": "Pre-Bid Meeting Minutes for 500 MW Peak Power Supply from BESS", "type": "Minutes"},
-    {"title": "Corrigendum to RfS No. SECI/C&P/2025/001 for Manufacturing Linked Solar Tender", "type": "Corrigendum"},
-    {"title": "SECI Signs Power Sale Agreement with NHPC for 1000 MW RE Power", "type": "PSA"},
-    {"title": "Notification: Revised Guidelines for Wind-Solar Hybrid Projects with Storage", "type": "Notification"},
-    {"title": "SECI Invites Bids for 400 MW Round-the-Clock (RTC) Power from RE Sources", "type": "RfS"},
-    {"title": "Results Declared: Tariff of Rs 2.54/kWh Discovered for Gujarat Solar Park", "type": "Results"},
-    {"title": "SECI Issues Clarifications to Pre-Bid Queries for Green Hydrogen Tender", "type": "Clarification"},
-    {"title": "Extension of Bid Submission Date for 750 MW FDRE Tender to 15th February 2026", "type": "Extension"},
-    {"title": "SECI Announces Successful Grid Synchronization of 500 MW Wind Project", "type": "Announcement"},
-    {"title": "Request for Selection of Solar Developers for 600 MW Projects with ALMM Compliance", "type": "RfS"},
-    {"title": "SECI Releases Draft RfS for Procurement of 1000 MW Firm Power from RE with Storage", "type": "Draft"},
-    {"title": "Notice: Revised Timelines for Commissioning of Projects under Tranche-X", "type": "Notice"},
+    {"title": "SECI Announces Results of e-Reverse Auction for 1200 MW ISTS Solar Projects", "type": "Results", "url": "https://www.seci.co.in/tenders", "item_type": "news"},
+    {"title": "Amendment-III to RfS for 1500 MW Tranche-XII Wind Power Projects", "type": "Amendment", "url": "https://www.seci.co.in/tenders/archive", "item_type": "news"},
+    {"title": "SECI Issues Letter of Award (LoA) to Successful Bidders for 2000 MW Hybrid Projects", "type": "LoA", "url": "https://www.seci.co.in/latest-news", "item_type": "news"},
+    {"title": "Pre-Bid Meeting Minutes for 500 MW Peak Power Supply from BESS", "type": "Minutes", "url": "https://www.seci.co.in/uploads/tenders/corrigendums/Pre-bid_meeting_notification29.pdf", "item_type": "news"},
+    {"title": "Corrigendum to RfS No. SECI/C&P/2025/001 for Manufacturing Linked Solar Tender", "type": "Corrigendum", "url": "https://www.seci.co.in/tenders", "item_type": "news"},
+    {"title": "SECI Signs Power Sale Agreement with NHPC for 1000 MW RE Power", "type": "PSA", "url": "https://www.seci.co.in/press-release", "item_type": "news"},
+    {"title": "Notification: Revised Guidelines for Wind-Solar Hybrid Projects with Storage", "type": "Notification", "url": "https://www.seci.co.in/latest-news", "item_type": "news"},
+    {"title": "SECI Invites Bids for 400 MW Round-the-Clock (RTC) Power from RE Sources", "type": "RfS", "url": "https://www.seci.co.in/tenders", "item_type": "tender"},
+    {"title": "Results Declared: Tariff of Rs 2.54/kWh Discovered for Gujarat Solar Park", "type": "Results", "url": "https://www.seci.co.in/press-release", "item_type": "news"},
+    {"title": "SECI Issues Clarifications to Pre-Bid Queries for Green Hydrogen Tender", "type": "Clarification", "url": "https://www.seci.co.in/tenders", "item_type": "news"},
+    {"title": "Extension of Bid Submission Date for 750 MW FDRE Tender", "type": "Extension", "url": "https://www.seci.co.in/tenders/archive", "item_type": "news"},
+    {"title": "SECI Announces Successful Grid Synchronization of 500 MW Wind Project", "type": "Announcement", "url": "https://www.seci.co.in/press-release", "item_type": "news"},
+    {"title": "Request for Selection of Solar Developers for 600 MW Projects with ALMM Compliance", "type": "RfS", "url": "https://www.seci.co.in/tenders", "item_type": "tender"},
+    {"title": "SECI Releases Draft RfS for Procurement of 1000 MW Firm Power from RE with Storage", "type": "Draft", "url": "https://www.seci.co.in/latest-news", "item_type": "news"},
+    {"title": "Notice: Revised Timelines for Commissioning of Projects under Tranche-X", "type": "Notice", "url": "https://www.seci.co.in/tenders", "item_type": "tender"},
 ]
 
 def generate_content_hash(source: str, title: str, url: str) -> str:
@@ -56,13 +56,7 @@ def generate_content_hash(source: str, title: str, url: str) -> str:
     content = f"{source}:{title}:{url}:{datetime.now(timezone.utc).isoformat()}"
     return hashlib.sha256(content.encode()).hexdigest()
 
-def generate_mnre_url(tender_num: int) -> str:
-    """Generate realistic MNRE URL."""
-    return f"https://www.mnre.gov.in/tenders/tender-{tender_num}-2026"
-
-def generate_seci_url(news_id: int) -> str:
-    """Generate realistic SECI URL."""
-    return f"https://www.seci.co.in/whats-new/seci-announcement-{news_id}"
+# URL generation functions removed - now using real URLs from data
 
 def seed_database():
     """Seed the database with realistic demo data."""
@@ -144,7 +138,7 @@ def seed_database():
 
             # Create news items for this run
             if status in ["success", "partial"]:
-                # MNRE items (40-60% of items)
+                # MNRE items (40-60% of items) - TENDERS
                 mnre_count = random.randint(1, max(1, items_found // 2))
                 for i in range(mnre_count):
                     tender = random.choice([t for t in MNRE_TENDERS if t["title"] not in used_mnre] or MNRE_TENDERS)
@@ -152,10 +146,8 @@ def seed_database():
                     if len(used_mnre) > 10:
                         used_mnre.pop(0)
 
-                    tender_num = random.randint(10000, 99999)
                     pub_date = (morning_run - timedelta(days=random.randint(0, 3))).strftime("%d-%b-%Y")
-                    url = generate_mnre_url(tender_num)
-                    state = random.choice(STATES)
+                    url = tender["url"]  # Use real URL from data
                     title = tender["title"]
 
                     item = NewsItem(
@@ -166,12 +158,13 @@ def seed_database():
                         content_hash=generate_content_hash("mnre", title, url),
                         run_id=run.id,
                         created_at=morning_run + timedelta(seconds=random.randint(5, int(duration) - 5)),
-                        is_new=(i < new_items // 2 + 1)
+                        is_new=(i < new_items // 2 + 1),
+                        item_type=tender["item_type"]
                     )
                     db.add(item)
                     total_news_items += 1
 
-                # SECI items (remaining items)
+                # SECI items (remaining items) - NEWS/TENDERS
                 seci_count = items_found - mnre_count
                 for i in range(seci_count):
                     news = random.choice([n for n in SECI_NEWS if n["title"] not in used_seci] or SECI_NEWS)
@@ -179,19 +172,19 @@ def seed_database():
                     if len(used_seci) > 10:
                         used_seci.pop(0)
 
-                    news_id = random.randint(1000, 9999)
-                    url = generate_seci_url(news_id)
+                    url = news["url"]  # Use real URL from data
                     title = news["title"]
 
                     item = NewsItem(
                         source="seci",
-                        title=title,
+                        title=f"[{news['type']}] {title}",
                         url=url,
                         published_date=morning_run.strftime("%d-%b-%Y"),
                         content_hash=generate_content_hash("seci", title, url),
                         run_id=run.id,
                         created_at=morning_run + timedelta(seconds=random.randint(5, int(duration) - 5)),
-                        is_new=(i < (new_items - new_items // 2))
+                        is_new=(i < (new_items - new_items // 2)),
+                        item_type=news["item_type"]
                     )
                     db.add(item)
                     total_news_items += 1

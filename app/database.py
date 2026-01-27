@@ -117,6 +117,7 @@ class NewsItem(Base):
     run_id = Column(Integer, ForeignKey("runs.id"))
     created_at = Column(DateTime, default=datetime.utcnow)
     is_new = Column(Boolean, default=True)
+    item_type = Column(String(20), nullable=True, default='news')  # 'tender' or 'news'
 
     # Relationships
     source_rel = relationship("Source", back_populates="news_items")
@@ -126,6 +127,7 @@ class NewsItem(Base):
         Index("idx_news_source", "source"),
         Index("idx_news_created", "created_at"),
         Index("idx_news_hash", "content_hash"),
+        Index("ix_news_items_item_type", "item_type"),
     )
 
 
