@@ -31,6 +31,14 @@ async def lifespan(app: FastAPI):
     init_db()
     logger.info("Database initialized")
 
+    # Seed demo data (for ephemeral SQLite on Render)
+    try:
+        from seed_demo import seed_database
+        seed_database()
+        logger.info("Demo data seeded")
+    except Exception as e:
+        logger.warning(f"Demo seeding skipped: {e}")
+
     # Start scheduler
     try:
         from app.services.scheduler import SchedulerService
