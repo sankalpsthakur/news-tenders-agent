@@ -1,5 +1,6 @@
 """
-SQLite database layer with SQLAlchemy ORM.
+Database layer with SQLAlchemy ORM.
+Supports both SQLite and PostgreSQL.
 Manages runs, news items, notifications, sources, and settings.
 """
 
@@ -18,21 +19,30 @@ from sqlalchemy.pool import StaticPool
 
 from app.config import settings
 
-# Create engine with SQLite optimizations
-engine = create_engine(
-    settings.database_url,
-    connect_args={"check_same_thread": False},
-    poolclass=StaticPool,
-    echo=settings.debug
-)
+# Create engine - conditional based on database type
+if settings.database_url.startswith("sqlite"):
+    # SQLite-specific configuration
+    engine = create_engine(
+        settings.database_url,
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+        echo=settings.debug
+    )
 
-# Enable foreign keys for SQLite
-@event.listens_for(engine, "connect")
-def set_sqlite_pragma(dbapi_connection, connection_record):
-    cursor = dbapi_connection.cursor()
-    cursor.execute("PRAGMA foreign_keys=ON")
-    cursor.execute("PRAGMA journal_mode=WAL")
-    cursor.close()
+    # Enable foreign keys for SQLite
+    @event.listens_for(engine, "connect")
+    def set_sqlite_pragma(dbapi_connection, connection_record):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.execute("PRAGMA journal_mode=WAL")
+        cursor.close()
+else:
+    # PostgreSQL configuration
+    engine = create_engine(
+        settings.database_url,
+        echo=settings.debug,
+        pool_pre_ping=True
+    )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
