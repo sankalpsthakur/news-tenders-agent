@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARIA Proposal - Visusta</title>
+    <style>
+        @page { size: A4; margin: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            line-height: 1.4;
+            background: #fff;
+            color: #1a1a1a;
+        }
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 10mm 12mm;
+            page-break-after: always;
+        }
+        .header-badge {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 3px 8px;
+            font-size: 8px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .main-title {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+        .main-title .accent { color: #f97316; }
+        .meta-info {
+            font-size: 8px;
+            text-align: right;
+            line-height: 1.5;
+        }
+        .flex-row { display: flex; gap: 10px; }
+        .flex-col { display: flex; flex-direction: column; gap: 8px; }
+        .box {
+            border: 1px solid #1a1a1a;
+            padding: 8px;
+            flex: 1;
+        }
+        .box-title {
+            font-weight: bold;
+            font-size: 10px;
+            border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+        }
+        .box-label { font-weight: bold; }
+        .box-value { margin-left: 4px; }
+        .orange { color: #f97316; }
+        .dashed-box {
+            border: 1px dashed #666;
+            padding: 4px 6px;
+            margin-top: 6px;
+            font-size: 8px;
+        }
+        .section-title {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 3px 8px;
+            font-size: 9px;
+            font-weight: bold;
+            margin: 12px 0 8px 0;
+            display: inline-block;
+        }
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px 0;
+        }
+        .timeline-item {
+            text-align: center;
+            flex: 1;
+        }
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            margin: 0 auto 6px;
+        }
+        .timeline-dot.hollow {
+            background: #fff;
+            border: 2px solid #1a1a1a;
+        }
+        .timeline-label { font-weight: bold; font-size: 9px; }
+        .timeline-desc { font-size: 7px; color: #666; }
+        .phase-table { width: 100%; border-collapse: collapse; margin: 6px 0; }
+        .phase-table td { padding: 3px 6px; border-bottom: 1px solid #ddd; font-size: 8px; }
+        .phase-table td:first-child { width: 20px; font-weight: bold; }
+        .outcome {
+            font-weight: bold;
+            font-size: 9px;
+            margin-top: 8px;
+        }
+        .total-box {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 16px 20px;
+            margin-top: 16px;
+        }
+        .total-label {
+            font-size: 8px;
+            color: #f97316;
+            margin-bottom: 4px;
+        }
+        .total-amount {
+            font-size: 52px;
+            font-weight: 900;
+            color: #f97316;
+            text-align: right;
+            letter-spacing: -2px;
+        }
+        .total-detail { font-size: 8px; color: #aaa; }
+        .footer-info {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .company-info { font-size: 8px; }
+        .company-name { font-weight: bold; font-size: 10px; }
+        .signature-line {
+            border-top: 1px solid #1a1a1a;
+            width: 150px;
+            margin-top: 30px;
+            padding-top: 4px;
+            font-size: 8px;
+        }
+        .status-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .status-icon {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #1a1a1a;
+            border-radius: 50%;
+        }
+        .status-text { font-size: 9px; color: #666; }
+        table.data-table { width: 100%; border-collapse: collapse; font-size: 8px; }
+        table.data-table th {
+            background: #f5f5f5;
+            text-align: left;
+            padding: 4px 6px;
+            border-bottom: 1px solid #1a1a1a;
+            font-weight: bold;
+        }
+        table.data-table td {
+            padding: 4px 6px;
+            border-bottom: 1px solid #eee;
+        }
+        .principle-box {
+            border: 1px solid #1a1a1a;
+            padding: 6px;
+            flex: 1;
+            min-width: 100px;
+        }
+        .principle-title {
+            font-weight: bold;
+            font-size: 8px;
+            color: #f97316;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 3px;
+            margin-bottom: 3px;
+        }
+        .principle-desc { font-size: 7px; color: #666; }
+        .workflow-box {
+            background: #f5f5f5;
+            padding: 6px;
+            margin: 4px 0;
+            font-size: 8px;
+        }
+        .workflow-title { font-weight: bold; margin-bottom: 2px; }
+        .cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .cols-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .small { font-size: 7px; }
+        .bold { font-weight: bold; }
+        .mt-8 { margin-top: 8px; }
+        .mt-4 { margin-top: 4px; }
+        .phase-box {
+            border: 1px solid #1a1a1a;
+            padding: 8px;
+        }
+        .phase-header {
+            font-weight: bold;
+            font-size: 9px;
+            margin-bottom: 6px;
+        }
+        .phase-header .orange { font-size: 8px; }
+        .success-box {
+            border-top: 1px dashed #666;
+            margin-top: 6px;
+            padding-top: 4px;
+            font-size: 7px;
+        }
+    </style>
+</head>
+<body>
+    <!-- PAGE 1 -->
+    <div class="page">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <div class="header-badge">ENGINEERING PROPOSAL</div>
+                <div class="main-title">OP-<span class="accent">ARIA</span></div>
+                <div class="main-title accent" style="font-size: 26px;">REGULATORY INTELLIGENCE</div>
+            </div>
+            <div class="meta-info">
+                ID: PROP-20250128-002<br>
+                DATE: 2025-01-28<br>
+                VALID: 7 DAYS<br>
+                CLIENT: VISUSTA
+            </div>
+        </div>
+
+        <!-- INPUT/PROCESSOR/OUTPUT -->
+        <div class="flex-row" style="margin-top: 16px;">
+            <div class="box">
+                <div class="box-title">01. INPUT_SOURCE</div>
+                <div><span class="box-label">A.</span> Government Portals (HTML/PDF)</div>
+                <div><span class="box-label">B.</span> Industry Bodies (RSS/Email)</div>
+                <div class="dashed-box">RAW DATA → SCRAPER → INGEST</div>
+            </div>
+            <div class="box">
+                <div class="box-title">02. PROCESSOR</div>
+                <div><span class="box-label">CORE:</span> LLM Analysis Engine</div>
+                <div><span class="box-label">FUNC:</span> Filter, Summarize, Categorize</div>
+                <div class="dashed-box">VALIDATE → ENRICH → STORE</div>
+            </div>
+            <div class="box">
+                <div class="box-title">03. OUTPUT_GAIN</div>
+                <div><span class="box-label">TARGET:</span> Client-ready Intel</div>
+                <div><span class="box-label">FORMAT:</span> PDF, Email, Dashboard</div>
+                <div class="dashed-box">EXPORT → DELIVER → <span class="orange">$$</span></div>
+            </div>
+        </div>
+
+        <!-- TIMELINE -->
+        <div class="section-title">SEQUENCER // TIMELINE</div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-label">WK 1-2</div>
+                <div class="timeline-desc">Foundation<br>Scrapers, Config</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-label">WK 3-4</div>
+                <div class="timeline-desc">Core Pipeline<br>LLM + Filters</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background: #f97316;"></div>
+                <div class="timeline-label">WK 5-6</div>
+                <div class="timeline-desc">Phase 1 Delivery<br><span class="orange bold">SHOWCASE</span></div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot hollow"></div>
+                <div class="timeline-label">WK 7</div>
+                <div class="timeline-desc">Scale Config<br>Multi-source</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot hollow"></div>
+                <div class="timeline-label">WK 8</div>
+                <div class="timeline-desc">Phase 2 Delivery<br><span class="orange bold">HANDOVER</span></div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot hollow"></div>
+                <div class="timeline-label">WK 9+</div>
+                <div class="timeline-desc">Support<br><span class="orange bold">WARRANTY</span></div>
+            </div>
+        </div>
+
+        <!-- PHASES -->
+        <div class="cols-2">
+            <div>
+                <div style="font-weight: bold; font-size: 13px; margin-bottom: 6px;">PHASE 1: SHOWCASE <span class="orange">(6 WEEKS)</span></div>
+                <table class="phase-table">
+                    <tr><td>01</td><td>Source Config</td><td>YAML-based URL definitions</td></tr>
+                    <tr><td>02</td><td>Scraper Engine</td><td>HTML + PDF extraction</td></tr>
+                    <tr><td>03</td><td>LLM Pipeline</td><td>Gemini 3.0 Flash + summary</td></tr>
+                    <tr><td>04</td><td>Report Gen</td><td>Branded PDF output</td></tr>
+                    <tr><td>05</td><td>Admin Dash</td><td>Source status, run history</td></tr>
+                </table>
+                <div class="outcome">OUTCOME: <span class="orange">DEMO READY FOR CLIENT PITCH.</span></div>
+            </div>
+            <div>
+                <div style="font-weight: bold; font-size: 13px; margin-bottom: 6px;">PHASE 2: HANDOVER <span class="orange">(2 WEEKS)</span></div>
+                <table class="phase-table">
+                    <tr><td>06</td><td>Multi-Source</td><td>EUR-Lex, BGBl, BMUV, BAFA</td></tr>
+                    <tr><td>07</td><td>Scheduler</td><td>Cron automation, alerts</td></tr>
+                    <tr><td>08</td><td>Reporting</td><td>Monthly + Quarterly templates</td></tr>
+                    <tr><td>09</td><td>Deploy Docs</td><td>Docker + infra guide</td></tr>
+                    <tr><td>10</td><td>Code Transfer</td><td>Full repo + handover call</td></tr>
+                </table>
+                <div class="outcome">OUTCOME: <span class="orange">FULL IP OWNERSHIP. ZERO FEES.</span></div>
+            </div>
+        </div>
+
+        <!-- TOTAL -->
+        <div class="total-box">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div class="total-label">TOTAL INVESTMENT</div>
+                    <div class="total-detail">INCLUDES PHASE 1, PHASE 2 & BUFFER</div>
+                    <div class="total-detail" style="margin-top: 8px;">
+                        PHASE 1: $6,000<br>
+                        PHASE 2: $2,000<br>
+                        BUFFER: $2,000
+                    </div>
+                </div>
+                <div>
+                    <div class="total-amount">$10,000</div>
+                    <div style="text-align: right; font-size: 10px;">USD // 8 WEEKS</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer-info">
+            <div class="company-info">
+                <div class="company-name">100X ENGINEERING</div>
+                <div>Intelligence from bits to atoms.</div>
+                <div>admin@100xai.engineering</div>
+                <div class="status-bar">
+                    <div class="status-icon"></div>
+                    <div class="status-icon"></div>
+                    <div class="status-text">SYSTEM READY. WAITING FOR INPUT.</div>
+                </div>
+            </div>
+            <div>
+                <div style="font-size: 8px; font-weight: bold;">ACCEPTANCE PARAMETERS</div>
+                <div class="signature-line">AUTHORIZED SIGNATURE</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div class="page">
+        <div class="header-badge">APPENDIX A // REQUIREMENTS</div>
+
+        <!-- DESIGN PRINCIPLES -->
+        <div style="font-weight: bold; font-size: 12px; margin: 8px 0;">CORE DESIGN PRINCIPLES</div>
+        <div class="flex-row">
+            <div class="principle-box">
+                <div class="principle-title">CONFIG-FIRST</div>
+                <div class="principle-desc">YAML source definitions, no-code URL additions</div>
+            </div>
+            <div class="principle-box">
+                <div class="principle-title">LLM-NATIVE</div>
+                <div class="principle-desc">Gemini 3.0 Flash for relevance scoring</div>
+            </div>
+            <div class="principle-box">
+                <div class="principle-title">CLIENT-BRANDED</div>
+                <div class="principle-desc">White-label outputs, custom formats</div>
+            </div>
+            <div class="principle-box">
+                <div class="principle-title">MULTI-JURISDICTION</div>
+                <div class="principle-desc">EU + DE Federal (expandable)</div>
+            </div>
+            <div class="principle-box">
+                <div class="principle-title">BUILD & TRANSFER</div>
+                <div class="principle-desc">Full IP ownership, zero license fees</div>
+            </div>
+        </div>
+
+        <!-- SOURCE TYPES -->
+        <div style="font-weight: bold; font-size: 12px; margin: 12px 0 6px;">SOURCE CAPTURE (SHOWCASE: DE FOOD COMPANY)</div>
+        <table class="data-table">
+            <tr><th>Source Type</th><th>Method</th><th>Frequency</th><th>Example</th></tr>
+            <tr><td>Federal Law Gazette</td><td>RSS / API</td><td>Daily</td><td>Bundesgesetzblatt (recht.bund.de)</td></tr>
+            <tr><td>EU Law Repository</td><td>RSS Alerts</td><td>Daily</td><td>EUR-Lex (eur-lex.europa.eu)</td></tr>
+            <tr><td>Ministry Portal</td><td>HTML / Newsletter</td><td>Weekly</td><td>BMUV, UBA (Environment)</td></tr>
+            <tr><td>Authority Guidance</td><td>HTML / Newsletter</td><td>Weekly</td><td>BAFA (LkSG), ZSVR (Packaging)</td></tr>
+        </table>
+
+        <div class="cols-2" style="margin-top: 12px;">
+            <div>
+                <div style="font-weight: bold; font-size: 12px; margin-bottom: 6px;">PROCESSING PIPELINE</div>
+                <div class="workflow-box">
+                    <div class="workflow-title">INGEST → DEDUPE → LLM_FILTER</div>
+                    Relevance score 0-100, discard &lt;30
+                </div>
+                <div class="workflow-box">
+                    <div class="workflow-title">SUMMARIZE → CATEGORIZE → STORE</div>
+                    Extract: Title, Date, Jurisdiction, Impact
+                </div>
+                <div class="workflow-box">
+                    <div class="workflow-title">FORMAT → BRAND → DELIVER</div>
+                    PDF template, Email dispatch, Dashboard update
+                </div>
+            </div>
+            <div>
+                <div style="font-weight: bold; font-size: 12px; margin-bottom: 6px;">REPORT OUTPUTS</div>
+                <table class="data-table">
+                    <tr><th>Type</th><th>Content</th><th>Freq</th></tr>
+                    <tr><td><strong>Monthly Impact</strong></td><td>Regulatory changes, drafts, implications, action items</td><td>Monthly</td></tr>
+                    <tr><td><strong>Quarterly Strategic</strong></td><td>Horizon watch, trends, compliance calendar</td><td>Quarterly</td></tr>
+                </table>
+                <div class="small" style="margin-top: 6px; background: #f5f5f5; padding: 4px;">
+                    <strong>Each report includes:</strong> Regulatory changes | Draft & upcoming | Horizon watch | Practical implications | Action items
+                </div>
+            </div>
+        </div>
+
+        <!-- OUTPUT FORMATS -->
+        <div style="font-weight: bold; font-size: 12px; margin: 12px 0 6px;">OUTPUT FORMATS</div>
+        <table class="data-table">
+            <tr><th>Format</th><th>Use Case</th><th>Delivery</th><th>Customizable</th></tr>
+            <tr><td>PDF Report</td><td>Client briefing</td><td>Email attachment / Portal</td><td>Logo, colors, layout</td></tr>
+            <tr><td>Email Alert</td><td>Flash notifications</td><td>SMTP / SendGrid</td><td>Template, frequency</td></tr>
+            <tr><td>Web Dashboard</td><td>Internal analysis</td><td>Hosted web app</td><td>Filters, views</td></tr>
+            <tr><td>CSV/JSON Export</td><td>Data integration</td><td>API / Download</td><td>Schema mapping</td></tr>
+        </table>
+
+        <!-- LLM RULES -->
+        <div style="font-weight: bold; font-size: 12px; margin: 12px 0 6px;">LLM ANALYSIS RULES</div>
+        <table class="data-table">
+            <tr><th>Rule</th><th>Condition</th><th>Action</th><th>Rule</th><th>Condition</th><th>Action</th></tr>
+            <tr><td>Relevance</td><td>Score &lt; 30</td><td>Discard</td><td>Duplicate</td><td>Hash match</td><td>Skip</td></tr>
+            <tr><td>Critical</td><td>Score &gt; 90</td><td>Flash alert</td><td>Source down</td><td>3x retry fail</td><td>Flag admin</td></tr>
+            <tr><td>Jurisdiction</td><td>Match config</td><td>Include</td><td>PDF size</td><td>&gt; 10MB</td><td>Chunk process</td></tr>
+        </table>
+
+        <!-- USER ROLES -->
+        <div class="cols-2" style="margin-top: 12px;">
+            <div>
+                <div style="font-weight: bold; font-size: 12px; margin-bottom: 6px;">USER ROLES</div>
+                <table class="data-table">
+                    <tr><th>Role</th><th>Functions</th><th>Access</th></tr>
+                    <tr><td>Admin</td><td>Config, sources, users</td><td>Full</td></tr>
+                    <tr><td>Analyst</td><td>Dashboard, reports, export</td><td>Read + Run</td></tr>
+                    <tr><td>Client</td><td>View reports only</td><td>Portal only</td></tr>
+                </table>
+            </div>
+            <div>
+                <div style="font-weight: bold; font-size: 12px; margin-bottom: 6px;">ADMIN MODULES</div>
+                <div class="small">
+                    <strong>DASHBOARD:</strong> Source status, run history, error log<br>
+                    <strong>SOURCES:</strong> Add/edit URLs, test scraper, preview<br>
+                    <strong>REPORTS:</strong> Generate on-demand, schedule, templates<br>
+                    <strong>ALERTS:</strong> Configure recipients, thresholds, channels
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 3 -->
+    <div class="page">
+        <div class="header-badge">APPENDIX B // TECHNICAL SPECIFICATION</div>
+
+        <!-- TECH STACK -->
+        <div class="cols-2" style="margin-top: 8px;">
+            <div>
+                <div style="font-weight: bold; font-size: 12px; margin-bottom: 6px;">TECHNOLOGY STACK</div>
+                <table class="data-table">
+                    <tr><td><strong>Backend</strong></td><td>Python 3.11+ / FastAPI</td></tr>
+                    <tr><td><strong>Scrapers</strong></td><td>BeautifulSoup / Playwright</td></tr>
+                    <tr><td><strong>LLM</strong></td><td>Google Gemini 3.0 Flash</td></tr>
+                    <tr><td><strong>Database</strong></td><td>PostgreSQL / SQLite</td></tr>
+                    <tr><td><strong>Queue</strong></td><td>Redis / APScheduler</td></tr>
+                    <tr><td><strong>Frontend</strong></td><td>Jinja2 Templates / Tailwind</td></tr>
+                    <tr><td><strong>Deploy</strong></td><td>Docker / Render / AWS</td></tr>
+                </table>
+            </div>
+            <div>
+                <div style="font-weight: bold; font-size: 12px; margin-bottom: 6px;">INFRASTRUCTURE COSTS (VISUSTA PAYS DIRECT)</div>
+                <table class="data-table">
+                    <tr><th>Service</th><th>Est./Month</th><th>Provider</th></tr>
+                    <tr><td>Cloud Hosting</td><td>$20-50</td><td>Render/Railway</td></tr>
+                    <tr><td>LLM API</td><td>$10-30</td><td>Google Gemini</td></tr>
+                    <tr><td>Proxy (if needed)</td><td>$20-50</td><td>ScraperAPI</td></tr>
+                    <tr><td>Email (SMTP)</td><td>$10</td><td>SendGrid</td></tr>
+                    <tr><td><strong>TOTAL</strong></td><td><strong>~$60-120</strong></td><td></td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PHASED ROLLOUT -->
+        <div style="font-weight: bold; font-size: 12px; margin: 12px 0 6px;">PHASED ROLLOUT</div>
+        <div class="cols-3">
+            <div class="phase-box">
+                <div class="phase-header">PILOT <span class="orange">(WK 1-6)</span></div>
+                <div class="small">
+                    1-3 sources, single jurisdiction<br>
+                    Basic scraping + LLM pipeline<br>
+                    Sample reports for pitch<br>
+                    Manual run trigger
+                </div>
+                <div class="success-box">
+                    <strong>SUCCESS:</strong> Demo ready, 1 formatted report, client impressed
+                </div>
+            </div>
+            <div class="phase-box">
+                <div class="phase-header">PRODUCTION <span class="orange">(WK 7-8)</span></div>
+                <div class="small">
+                    Multi-source configuration<br>
+                    Automated scheduling<br>
+                    Email alerts setup<br>
+                    Deployment documentation
+                </div>
+                <div class="success-box">
+                    <strong>SUCCESS:</strong> 5+ sources, daily automation, handover ready
+                </div>
+            </div>
+            <div class="phase-box">
+                <div class="phase-header">SCALE <span class="orange">(FUTURE)</span></div>
+                <div class="small">
+                    Multi-country expansion<br>
+                    Client portal access<br>
+                    Newsletter automation<br>
+                    SDR lead gen module
+                </div>
+                <div class="success-box">
+                    <strong>SUCCESS:</strong> 10+ clients, recurring revenue, autonomous ops
+                </div>
+            </div>
+        </div>
+
+        <!-- TERMS -->
+        <div class="cols-2" style="margin-top: 12px;">
+            <div>
+                <div style="font-weight: bold; font-size: 12px; margin-bottom: 6px;">TERMS & CONDITIONS</div>
+                <div style="font-weight: bold; font-size: 10px; margin: 8px 0 4px;">PAYMENT SCHEDULE</div>
+                <table class="data-table">
+                    <tr><th>Milestone</th><th>%</th><th>Amount</th></tr>
+                    <tr><td>Kickoff (Pilot Start)</td><td>30%</td><td>$3,000</td></tr>
+                    <tr><td>Final (Code Handover)</td><td>70%</td><td>$7,000</td></tr>
+                </table>
+                <div class="small" style="margin-top: 4px; color: #666;">
+                    <em>Standard terms: 50% advance, 50% delivery. Pilot rate offered as partnership gesture.</em>
+                </div>
+                <div style="font-weight: bold; font-size: 10px; margin: 8px 0 4px;">ENGAGEMENT MODEL</div>
+                <div class="small">
+                    • Weekly strategy calls (30 min) during build<br>
+                    • Async updates via Slack/Email<br>
+                    • Shared task board (Linear/Notion)<br>
+                    • Demo at end of each phase
+                </div>
+                <div style="font-weight: bold; font-size: 10px; margin: 8px 0 4px;">ASSUMPTIONS</div>
+                <div class="small">
+                    1. Source URLs provided within Week 1<br>
+                    2. Feedback within 3 business days<br>
+                    3. Cloud account provided (or we provision)<br>
+                    4. Report format examples provided
+                </div>
+            </div>
+            <div>
+                <div style="font-weight: bold; font-size: 12px; margin-bottom: 6px; color: #f97316;">OUT OF SCOPE (EXCLUSIONS)</div>
+                <div class="small" style="background: #fff5f5; padding: 8px; border: 1px solid #fcc;">
+                    • Ongoing maintenance/support post-handover<br>
+                    • LLM API costs (paid by Visusta direct)<br>
+                    • Cloud hosting costs (paid by Visusta direct)<br>
+                    • Custom integrations beyond defined scope<br>
+                    • Legal compliance review of outputs<br>
+                    • Training beyond handover documentation<br>
+                    • Mobile app development<br>
+                    • Real-time translation services<br>
+                    • Premium proxy services for blocked sites<br>
+                    • 24/7 support or SLA guarantees
+                </div>
+                <div style="font-weight: bold; font-size: 10px; margin: 8px 0 4px;">LEGAL & JURISDICTION</div>
+                <div class="small" style="background: #f5f5f5; padding: 6px; border: 1px solid #ddd;">
+                    • Governing Law: Indian Contract Act, 1872<br>
+                    • Disputes: Arbitration (SIAC Rules), Singapore<br>
+                    • IP Transfer: Upon final payment clearance<br>
+                    • Liability: Limited to fees paid<br>
+                    • Warranty: 30-day bug fixes post-handover<br>
+                    • Force Majeure: Standard clause applies
+                </div>
+            </div>
+        </div>
+
+        <!-- VALUE PROP -->
+        <div style="background: #f5f5f5; padding: 10px; margin-top: 12px; border-left: 3px solid #f97316;">
+            <div style="font-weight: bold; font-size: 11px; margin-bottom: 6px;">YOUR UPSIDE // ROI CALCULATION</div>
+            <div class="small">
+                <strong>Investment:</strong> $10,000 one-time &nbsp;|&nbsp; <strong>Operational:</strong> ~$90/mo<br>
+                <strong>Revenue:</strong> CHF 500/month × 10 clients = CHF 5,000/mo recurring<br>
+                <strong>Payback:</strong> 2 months. Everything after is margin.<br>
+                <strong>IP Ownership:</strong> 100% yours. Resell, white-label, expand at will.
+            </div>
+        </div>
+
+        <!-- LEAD GEN BONUS -->
+        <div style="margin-top: 12px;">
+            <div style="font-weight: bold; font-size: 11px; margin-bottom: 6px;">BONUS: LEAD GENERATION PLAYBOOK</div>
+            <div class="cols-3">
+                <div class="small" style="background: #fff; padding: 6px; border: 1px solid #ddd;">
+                    <strong>1. FIRST-MOVER LINKEDIN</strong><br>
+                    Post regulatory changes within 30 min of breaking. Establish authority.
+                </div>
+                <div class="small" style="background: #fff; padding: 6px; border: 1px solid #ddd;">
+                    <strong>2. FREE WATCHLIST</strong><br>
+                    Prospects give 1 keyword, you auto-alert weekly. Costs pennies, stays top-of-mind.
+                </div>
+                <div class="small" style="background: #fff; padding: 6px; border: 1px solid #ddd;">
+                    <strong>3. TEASER NEWSLETTER</strong><br>
+                    "3 draft laws impacting 2026" — free preview, paywall deep analysis.
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer-info" style="margin-top: 16px;">
+            <div class="company-info">
+                <div class="company-name">100X ENGINEERING</div>
+                <div>Intelligence from bits to atoms.</div>
+                <div>admin@100xai.engineering</div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 8px; color: #666;">READY TO WIN?</div>
+                <div style="font-size: 10px; font-weight: bold; color: #f97316;">REPLY "APPROVED" TO START.</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
